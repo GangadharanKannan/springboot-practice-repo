@@ -1,32 +1,32 @@
 package com.gd.sample.controller;
 
-import com.gd.sample.dto.StudentDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.gd.sample.dto.Student;
+import com.gd.sample.service.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api")
 public class StudentController {
-    @GetMapping("/{id}")
-    public String getStudent(@PathVariable int id){
-        return "hello " + id;
+    @Autowired
+    StudentService studentService;
+
+    @GetMapping("/students")
+    public List<Student> getStudents(){
+        return studentService.getAllStudent();
     }
 
-    @GetMapping("/details")
-    public ArrayList<StudentDto> getDetail(){
-        ArrayList<StudentDto> res = new ArrayList<>();
-        StudentDto s1 = new StudentDto(1, "Arun", 23);
-        StudentDto s2 = new StudentDto(2, "Ganga", 24);
-        StudentDto s3 = new StudentDto(3, "Aadhi", 24);
+    @GetMapping("student/{id}")
+    public Optional<Student> getSingleStudent(@PathVariable int id){
+        return studentService.getSingleStudent(id);
+    }
 
-        res.add(s1);
-        res.add(s2);
-        res.add(s3);
-
-        return res;
+    @PostMapping("/student")
+    public Student postStudent(@RequestBody Student student){
+        return studentService.postStudent(student);
     }
 }
